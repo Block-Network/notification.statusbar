@@ -76,10 +76,12 @@ class SettingsActivity : PreferenceActivity() {
 
 
         findViewById<Button>(R.id.button).isEnabled = (serviceSwitch.isChecked && nLSetting.isChecked)
-        findViewById<Button>(R.id.button).setOnClickListener {  val intent = Intent(this, MNotificationListenerService::class.java)
+        findViewById<Button>(R.id.button).setOnClickListener {
+            val intent = Intent(this, MNotificationListenerService::class.java)
             startService(intent)
             toast("正在启动")
-            Log.e(getString(R.string.app_name), "启动") }
+            Log.e(getString(R.string.app_name), "启动")
+        }
     }
 
 
