@@ -12,8 +12,8 @@ import android.preference.Preference
 import android.preference.PreferenceActivity
 import android.preference.SwitchPreference
 import android.provider.Settings
+import android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import notification.statusbar.R
@@ -32,6 +32,7 @@ class SettingsActivity : PreferenceActivity() {
         init()
     }
 
+    @SuppressLint("BatteryLife")
     private fun init() {
 
         val serviceSwitch = (findPreference("serviceSwitch") as SwitchPreference)
@@ -62,6 +63,13 @@ class SettingsActivity : PreferenceActivity() {
         runSelf.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val packageURI = Uri.parse("package:" + "notification.statusbar")
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI)
+            startActivity(intent)
+            true
+        }
+        val batteryLife = findPreference("batteryLife")!!
+        batteryLife.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            @Suppress("SameParameterValue") val intent = Intent(ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+            intent.data = Uri.parse("package:" + activity.packageName)
             startActivity(intent)
             true
         }
