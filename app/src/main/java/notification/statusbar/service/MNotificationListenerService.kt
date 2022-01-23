@@ -42,13 +42,17 @@ class MNotificationListenerService : NotificationListenerService() {
             override fun run() {
 //                showToastOnLooper(this@MNotificationListenerService, (((Date().time - time) > 2).toString()))
 //                Log.e("NotificationListener", (Date().time - time).toString())
-                if ((Date().time - time).toInt() > 3000) {
-                    StatusBarLyric(
-                        this@MNotificationListenerService, null,
-                        "notification.statusbar", false
-                    ).stopLyric()
+                if (am != null) {
+                    if (!am!!.isMusicActive) {
+                        if ((Date().time - time).toInt() > 3000) {
+                            StatusBarLyric(
+                                this@MNotificationListenerService, null,
+                                "notification.statusbar", false
+                            ).stopLyric()
 //                    Log.e("NotificationListener", "stop")
-                    time = Date().time
+                            time = Date().time
+                        }
+                    }
                 }
             }
         }, 0, 1000)

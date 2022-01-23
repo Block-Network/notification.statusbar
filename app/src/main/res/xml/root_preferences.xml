@@ -1,26 +1,31 @@
 <!--suppress DeprecatedClassUsageInspection -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="必要权限"/>
+
     <SwitchPreference
             android:defaultValue="false"
             android:title="总开关"
-            android:summary=""
             android:key="serviceSwitch"/>
     <SwitchPreference
             android:defaultValue="false"
             android:title="读取通知权限"
-            android:summary=""
             android:key="nLSetting"/>
+    <PreferenceCategory android:title="非必要权限，不过为了在后台运行，建议还是打开"/>
+
     <Preference
             android:title="自启权限"
-            android:summary=""
             android:key="RunSelf"/>
+
+    <PreferenceCategory android:title="关于"/>
+
     <Preference
-            android:title="酷安链接"
-            android:key="By xiao_wine"
+            android:title="作者"
+            android:summary="By xiao_wine"
             android:icon="@drawable/header_xiaowine">
         <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://github.com/xiaowine"/>
+                android:data="https://www.coolapk.com/u/1648226"/>
     </Preference>
+
 
 </PreferenceScreen>

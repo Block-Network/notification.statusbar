@@ -6,7 +6,6 @@ import StatusBarLyric.API.StatusBarLyric
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.preference.Preference
@@ -14,6 +13,8 @@ import android.preference.PreferenceActivity
 import android.preference.SwitchPreference
 import android.provider.Settings
 import android.util.Log
+import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import notification.statusbar.R
 import notification.statusbar.service.MNotificationListenerService
@@ -26,6 +27,7 @@ class SettingsActivity : PreferenceActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_setting)
         addPreferencesFromResource(R.xml.root_preferences)
         init()
     }
@@ -64,15 +66,14 @@ class SettingsActivity : PreferenceActivity() {
             true
         }
 
-        if (serviceSwitch.isChecked && nLSetting.isChecked) {
-//        if (true && nLSetting.isChecked) {
-            val intent = Intent(this, MNotificationListenerService::class.java)
-            startService(intent)
-            toast("启动")
-            Log.e(getString(R.string.app_name), "启动")
-        }
 
+        findViewById<Button>(R.id.button).isEnabled = (serviceSwitch.isChecked && nLSetting.isChecked)
+        findViewById<Button>(R.id.button).setOnClickListener {  val intent = Intent(this, MNotificationListenerService::class.java)
+            startService(intent)
+            toast("正在启动")
+            Log.e(getString(R.string.app_name), "启动") }
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -83,6 +84,9 @@ class SettingsActivity : PreferenceActivity() {
                 Settings.Secure.getString(contentResolver, "enabled_notification_listeners")!!
                     .contains(MNotificationListenerService::class.java.name)
         }
+        findViewById<Button>(R.id.button).isEnabled =
+            ((findPreference("serviceSwitch") as SwitchPreference).isChecked &&
+                    (findPreference("nLSetting") as SwitchPreference).isChecked)
     }
 
     private fun toast(message: String) {
