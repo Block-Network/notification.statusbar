@@ -13,7 +13,7 @@ android {
         //noinspection OldTargetApi
         targetSdkVersion 32
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.2.1"
         aaptOptions.cruncherEnabled = false
         aaptOptions.useNewCruncher = false
     }
