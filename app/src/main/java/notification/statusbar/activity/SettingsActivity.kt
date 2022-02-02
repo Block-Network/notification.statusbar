@@ -8,13 +8,13 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.preference.EditTextPreference
 import android.preference.Preference
 import android.preference.PreferenceActivity
 import android.preference.SwitchPreference
 import android.provider.Settings
 import android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
 import android.util.Log
-import android.widget.Button
 import android.widget.Toast
 import notification.statusbar.R
 import notification.statusbar.service.MNotificationListenerService
@@ -27,7 +27,6 @@ class SettingsActivity : PreferenceActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setting)
         addPreferencesFromResource(R.xml.root_preferences)
         init()
     }
@@ -59,7 +58,7 @@ class SettingsActivity : PreferenceActivity() {
             }
             true
         }
-        val runSelf = findPreference("RunSelf")!!
+        val runSelf = findPreference("runSelf")!!
         runSelf.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val packageURI = Uri.parse("package:" + "notification.statusbar")
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI)
@@ -73,15 +72,37 @@ class SettingsActivity : PreferenceActivity() {
             startActivity(intent)
             true
         }
-
-
-        findViewById<Button>(R.id.button).isEnabled = (serviceSwitch.isChecked && nLSetting.isChecked)
-        findViewById<Button>(R.id.button).setOnClickListener {
-            val intent = Intent(this, MNotificationListenerService::class.java)
-            startService(intent)
-            toast("正在启动")
-            Log.e(getString(R.string.app_name), "启动")
+        val whiteList = findPreference("whiteList")!!
+        whiteList.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            startActivity(Intent(activity, WhiteListActivity::class.java))
+            true
         }
+        val displayTime = (findPreference("displayTime") as EditTextPreference)
+        displayTime.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue: Any ->
+            displayTime.summary = newValue.toString()
+            true
+        }
+        val refreshInterval = (findPreference("refreshInterval") as EditTextPreference)
+        refreshInterval.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue: Any ->
+            refreshInterval.summary = newValue.toString()
+            true
+        }
+
+
+        val run = findPreference("run")!!
+        run.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            if ((serviceSwitch.isChecked && nLSetting.isChecked)) {
+                val intent = Intent(this, MNotificationListenerService::class.java)
+                startService(intent)
+                toast("正在启动")
+                Log.e(getString(R.string.app_name), "正在启动")
+            } else {
+                toast("请授予全部必要权限")
+            }
+
+            true
+        }
+
     }
 
 
@@ -94,9 +115,6 @@ class SettingsActivity : PreferenceActivity() {
                 Settings.Secure.getString(contentResolver, "enabled_notification_listeners")!!
                     .contains(MNotificationListenerService::class.java.name)
         }
-        findViewById<Button>(R.id.button).isEnabled =
-            ((findPreference("serviceSwitch") as SwitchPreference).isChecked &&
-                    (findPreference("nLSetting") as SwitchPreference).isChecked)
     }
 
     private fun toast(message: String) {

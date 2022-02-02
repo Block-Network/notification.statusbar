@@ -1,10 +1,14 @@
 <!--suppress DeprecatedClassUsageInspection -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+            android:title="启动监听"
+            android:key="run"/>
+
     <PreferenceCategory android:title="必要权限"/>
 
     <SwitchPreference
             android:defaultValue="false"
-            android:title="总开关"
+            android:title="激活开关"
             android:key="serviceSwitch"/>
     <SwitchPreference
             android:defaultValue="false"
@@ -14,10 +18,30 @@
 
     <Preference
             android:title="自启权限"
-            android:key="RunSelf"/>
+            android:key="runSelf"/>
     <Preference
             android:title="忽略电池优化"
             android:key="batteryLife"/>
+    <PreferenceCategory android:title="自定义，重启软件后生效"/>
+    <Preference
+            android:title="白名单软件"
+            android:key="whiteList"/>
+    <EditTextPreference
+            android:defaultValue="3000"
+            android:title="显示时长,单位ms"
+            android:key="displayTime"
+            android:inputType="number"
+            android:maxLength="4"/>
+    <EditTextPreference
+            android:defaultValue="1000"
+            android:title="刷新间隔,单位ms"
+            android:key="refreshInterval"
+            android:inputType="number"
+            android:maxLength="4"/>
+    <SwitchPreference
+            android:defaultValue="false"
+            android:title="显示相同消息"
+            android:key="showSameMessage"/>
 
     <PreferenceCategory android:title="关于"/>
 
